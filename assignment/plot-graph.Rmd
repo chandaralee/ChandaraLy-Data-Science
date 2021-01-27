@@ -1,0 +1,78 @@
+```{r}
+
+data <- ggplot2 :: mpg
+data
+
+
+```
+a. add new column Transmission
+#using ggplot2
+```{r}
+data$Transmission <- ifelse(startsWith (data$trans, 'a'), 'automatic', 'manual')
+
+names(data)
+
+head(data)
+```
+
+b.plot the graph between cty and hwy
+```{r}
+plot <- ggplot(data, aes(x= cty, y= hwy))
+plot
+```
+
+
+c. x-axis title: City Mile per Galion Text in Green color, bold and center, size=15,
+space b/w text and graph: 25
+```{r}
+x_plot_title <- plot + xlab('City Mile per Galion')
+
+x_plot_title <- x_plot_title + theme(axis.title.x = element_text(size = 15, color = 'green', face='bold', margin=margin(r=25)))
+
+x_plot_title
+
+```
+d. y-axis title: Highway Miles per GallonText in Blue color, bold and center, size=15, space b/w text and graph: 30
+```{r}
+y_plot_title <- plot + ylab('Highway Miles per GallonText')
+
+y_plot_title <- y_plot_title + theme(axis.title.y = element_text(size = 15, color = 'blue', face='bold', margin=margin(r=30)))
+
+y_plot_title
+```
+
+plot_view
+```{r}
+plot_view <- plot + ylab('Highway Miles per GallonText') + xlab('City Mile per Galion') + theme(axis.title.y = element_text(size = 15, color = 'blue', face='bold', margin=margin(r=30))) + theme(axis.title.x = element_text(size = 15, color = 'green', face='bold', margin=margin(r=25)))
+
+plot_view
+
+```
+e. Create a subplot in a graph between Transmission and year
+
+
+```{r}
+sub_plot <- plot_view + facet_grid(Transmission ~ year) 
+sub_plot
+
+```
+
+f. Draw heights of the bars to represent values in the data, each bar's border is in blue color and fill with yellow color using geom_col()
+```{r}
+sub_plot <- sub_plot+ geom_col(fill='yellow', color='blue', face='bold')
+sub_plot
+```
+
+g. Graph rectangular box border is in red color and fill with blue
+```{r}
+sub_plot <- sub_plot + theme(strip.background = element_rect(color="red",fill='blue'))
+sub_plot
+```
+
+h. Graph title : Fuel economy data from 1999 to 2008
+Text color : Green, size: 20, center, bold
+```{r}
+sub_plot <- sub_plot + ggtitle('Fuel economy data from 1999 to 2008') + theme(plot.title = element_text(size=20 , color ='green', face ='bold', hjust = 0.5))
+sub_plot
+
+```

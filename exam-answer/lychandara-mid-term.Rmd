@@ -1,0 +1,319 @@
+1. Write a R code to Generate 6X6 matrix (A) using the random numbers between 1 to 100
+&amp; generate another 6x6 matrix (B) using random numbers between 500 to 600.
+
+```{r}
+A <- matrix(sample(1:100), 6,6)
+B <- matrix(sample(500:600),6,6)
+
+A
+B
+
+```
+a. Find the range of matrices A and B.
+```{r}
+#rangeA
+range(A)
+#rangeB
+range(B)
+```
+
+
+
+b.Find the max value from each row of the matrices A and B.
+```{r}
+#maximum of matrix A
+max(A)
+#maximum of matrix B
+max(B)
+
+```
+c. Find the diagonal values of matrices A&amp;B.
+
+```{r}
+#diagonal of matrix A
+diag(A)
+#diagonal of matrix A
+diag(B)
+
+```
+d. Multiply matrices A and B
+```{r}
+#mutiply of matrices A nad B
+A %*% B
+
+```
+
+e.Replace the 4th row of Matrix A with diagonal values of matrix B
+```{r}
+rbind(B)
+B
+
+```
+
+
+
+f.Multiply matrices A &amp; B and store the values on X.
+```{r}
+X <- A %*% B
+```
+
+g.Divide the matrix A with matrix B.
+```{r}
+A/B
+```
+
+
+
+
+2. Create a table using dataframe/tibble with the following categories(a to f) (10 marks)
+
+a. First name,
+b. Second Name,
+c. Age,
+d. Occupation,
+e. Place,
+f. Random numbers( between 1 to 10)
+
+And input at least 10 samples(observation) and do the following
+
+g. Extract the last column (f)
+
+h. Find the sum, mean and length of the extracted column
+
+```{r}
+fname <- c('ly', 'kaing', 'hoeurng', 'ley' , 'sang', 'daro', 'chea', 'han', 'hy', 'heng')
+sname <- c('chandara', 'sokheng', 'hen','kimteng','sonyratt','dalya', 'nataly', 'manich', 'chayrith', 'senghak')
+age <- c(20,21,21,21,21,19,22,21,23,25)
+occu <- rep(c('student', 'doctor','teacher'),3,10)
+pla <- rep(c('A', 'B','C'),3,10)
+num <- sample(1:10)
+
+data_frame <- data.frame(first_Name = fname, Second_Name= sname, Age= age, Occupation= occu, Place=pla,Number=num)
+data_frame
+```
+
+
+
+g. Extract the last column (f)
+```{r}
+f<- transmute(data_frame, Number)
+f
+
+```
+
+h. Find the sum, mean and length of the extracted column
+```{r}
+#sum
+sum(f)
+#mean
+mean(f$Number)
+#length
+length(f)
+
+```
+
+4. Find the assigned Dataset from the list below and perform the following (20 Marks)
+a. Import and Clean the dataset.
+
+```{r}
+my_data <- read_csv("D:/R/elo_blatter.csv")
+
+
+my_data
+
+is.na(my_data)
+
+my_data[] <- lapply(my_data, function(x) { 
+  x[is.na(x)] <- mean(x, na.rm = TRUE)
+  x
+})
+```
+
+
+
+b. Find the x and y variables(axis) from the assigned dataset and give the reason for
+selecting the x and y axis
+
+
+- I choose country as X axis and elo15 as Y axis.because it can display the elo15 statistic to the coutry 
+```{r}
+plot_data <- ggplot(my_data, mapping=aes(x = country, y=elo15))
+plot_data
+```
+
+the
+
+c. Plot the graph using geom_col() and perform the linear model in statistics.
+
+```{r}
+plot_col <- plot_data + geom_col()
+
+plot_col
+
+plot_data +  geom_smooth(method = "lm")
+```
+
+
+d. Perform the facet with the available columns(Choose the any two variables from the
+columns)
+
+```{r}
+
+facet_plot = plot_col + facet_grid( gdp_source ~ confederation)
+facet_plot
+```
+
+
+e. Use the theme layer to do the following (Note: Based on dataset, name the x and y axis &amp;
+graph)
+
+
+e.1. x-axis title =“________”, Size=10, Bold, Text in Green color, Center, space
+between graph and title = 20.
+
+```{r}
+plot_title <- facet_plot + xlab("_______") +  theme(axis.title.x = element_text(size = 25, color = 'green', face='bold', margin=margin(r=20)))
+plot_title
+```
+
+
+
+e.2. y-axis title =“________”, Size=10, Bold, Text in Yellow color, Center, space
+between graph and title = 20.
+
+
+```{r}
+plot_title <- plot_title + ylab('________') +  theme(axis.title.y = element_text(size = 10, color = 'yellow', face='bold', margin=margin(r=20)))
+plot_title
+```
+
+e.3. Graph title =”_________”,Size = 25, Bold, Center, Text in Blue color, space
+between graph and title = 25.
+
+```{r}
+plot_title <- plot_title + ggtitle('________') + theme(plot.title = element_text(size=25 , color ='blue', face ='bold', hjust = 0.5))
+
+plot_title
+```
+
+
+
+3. Create a .txt file (Minimum : 150 words) with the latest news (In English) in cambodia from
+the official news agency’s website(Note: Include the reference link) and do the following
+(20 Marks)
+
+a. Read the .txt file
+
+data link:https://www.phnompenhpost.com/national/public-urged-adopt-healthier-habits
+
+```{r}
+read_text = read_file("D:/R/hot_news.txt")
+read_text
+
+class(read_text)
+```
+
+
+
+#b. Perform the Tokenization count the words
+
+#c. 
+```{r}
+words_data <- paste0(read_text)
+
+tokens <- tokenize_words(words_data)
+
+count <- count_words(words_data)
+
+count
+
+```
+
+#c. Identify the most repeated word and replace that word with “KIT”
+#Identify the most repeated word
+
+```{r}
+most_words <- names(table(tokens))[as.vector(table(tokens))==max(table(tokens))]
+most_words_count <- max(table(tokens))
+print("The Most repeated word is: ")
+most_words
+print("repeated for:  ")
+most_words_count
+```
+
+
+
+```{r}
+#replace that word with “KIT”
+subs <- gsub(most_words, "KIT", words_data)
+subs
+#d. Perform the Sentiment analysis
+library(sentimentr)
+# To display the sentences
+result1<- get_sentences(subs) 
+result1
+
+
+
+```
+
+```{r}
+
+
+#d. Perform the Sentiment analysis
+library(sentimentr)
+# To display the sentences
+result1<- get_sentences(subs) 
+result1
+#number of sentences and words(Sentiment at the sentence level)
+result2<- sentiment(subs) # To know 
+result2
+# Aggregated sentiment group by each sentiment
+result3 <-sentiment_by(subs) 
+result3
+# Emotion at the sentence level one by one
+result4<- emotion(subs) 
+result4
+# Aggregated emotion group by emotion
+result5<- emotion_by(subs) 
+result5
+# Profanity at the sentence level
+result6<- profanity(subs) 
+result6
+# Aggregated profanity by group(s)
+result7<- profanity_by(subs) 
+
+
+
+
+```
+
+
+
+
+d. Perform the Sentiment analysis
+
+e. Plot the graph between “words count” and “words” using geom_col()
+
+e.1. X-axis title =“Number of words”, Size=10, Bold, Text in Blue color,
+Center, space between graph and title = 20.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
